@@ -32,7 +32,6 @@ public class ConsolePrinter {
 		switch(choice) {
 		case "1":
 			printAccountCreation();
-			printLogin();
 			buyOrReplace();
 			break;
 		case "2":
@@ -158,9 +157,9 @@ public class ConsolePrinter {
 		System.out.println("Would you like to buy or replace an item?");
 		Scanner input = new Scanner(System.in);
 		String choice = input.nextLine().trim();
-		if(choice == "buy") {
+		if(choice.contentEquals("buy")) {
 			printBuyItem();
-		}else if(choice == "replace") {
+		}else if(choice.contentEquals("replace")) {
 			printReplaceItem();
 		}else {
 			buyOrReplace();
@@ -173,16 +172,16 @@ public class ConsolePrinter {
 		
 		boolean shopping = true;
 		System.out.println("Enter the code of the item you wish to purchase");
-		while(shopping) {
-			for(Item i : items) {
-				System.out.println("Items    Item Code    Price");
+		System.out.println("Items    Item Code    Price");
+		while(shopping == true) {
+			for(Item i : items) {		
 				System.out.println(i.getName() + "   " + i.getCode() + "   " + i.getPrice());
 			}	
 			Scanner input = new Scanner(System.in);
 			String code = input.nextLine().trim();
 			Item purchase = new Item(code);
 			for(Item i : items) {
-				if(code == i.getCode()) {
+				if(code.contentEquals(i.getCode())) {
 					purchase.setName(i.getName());
 					purchase.setPrice(i.getPrice());
 				}
@@ -191,7 +190,7 @@ public class ConsolePrinter {
 			itemsToBuy.add(purchase);
 			System.out.println("Would you like to buy another item? Y or N");
 			String keepShopping = input.nextLine().trim();
-			if(keepShopping == "N") {
+			if(keepShopping.equalsIgnoreCase("N")) {
 				shopping = false;
 			}
 		}
@@ -209,16 +208,28 @@ public class ConsolePrinter {
 			System.out.println(i.getName() + "   " + i.getCode() + "   " + i.getPrice());
 			total += i.getPrice();
 		}
-		System.out.println("Total: " + total);
+		System.out.println("Total: $" + total + ".00");
 	}
 	
 	public void printReplaceItem() {
+		
+		List<Item> items = store.getItems();
+		List<Item> itemsToBuy = new ArrayList<Item>();
+		
 		System.out.println("Which item would you like to replace? Enter code.");
-		printBuyItem();
+		System.out.println("Items    Item Code    Price");
+		for(Item i : items) {		
+			System.out.println(i.getName() + "   " + i.getCode() + "   " + i.getPrice());
+		}
+		
 		Scanner input = new Scanner(System.in);
 		String oldItem = input.nextLine().trim();
 		System.out.println("And what would you like to replace it with? Enter code.");
-		printBuyItem();
+		System.out.println("Items    Item Code    Price");
+		for(Item i : items) {		
+			System.out.println(i.getName() + "   " + i.getCode() + "   " + i.getPrice());
+		}
+		
 		String newItem = input.nextLine().trim();
 		System.out.println("You have replaced " + oldItem + " with " + newItem + ". Thank you.");
 		input.close();
